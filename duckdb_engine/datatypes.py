@@ -1,5 +1,4 @@
-"""
-See https://duckdb.org/docs/sql/data_types/numeric for more information
+"""See https://duckdb.org/docs/sql/data_types/numeric for more information.
 
 Also
 ```sql
@@ -32,7 +31,7 @@ class UInt32(Integer):
 
 
 class UInt16(Integer):
-    "AKA USMALLINT"
+    "AKA USMALLINT."
 
 
 class UInt8(Integer):
@@ -40,13 +39,15 @@ class UInt8(Integer):
 
 
 class UTinyInteger(Integer):
-    "AKA UInt1"
+    "AKA UInt1."
+
     name = "UTinyInt"
     # UTINYINT	-	0	255
 
 
 class TinyInteger(Integer):
-    "AKA Int1"
+    "AKA Int1."
+
     name = "TinyInt"
     # TINYINT	INT1	-128	127
 
@@ -91,8 +92,7 @@ TV = typing.Union[Type[TypeEngine], TypeEngine]
 
 
 class Struct(TypeEngine):
-    """
-    Represents a STRUCT type in DuckDB
+    """Represents a STRUCT type in DuckDB.
 
     ```python
     from duckdb_engine.datatypes import Struct
@@ -109,13 +109,12 @@ class Struct(TypeEngine):
 
     __visit_name__ = "struct"
 
-    def __init__(self, fields: Optional[Dict[str, TV]] = None):
+    def __init__(self, fields: Optional[Dict[str, TV]] = None) -> None:
         self.fields = fields
 
 
 class Map(TypeEngine):
-    """
-    Represents a MAP type in DuckDB
+    """Represents a MAP type in DuckDB.
 
     ```python
     from duckdb_engine.datatypes import Map
@@ -132,26 +131,25 @@ class Map(TypeEngine):
     key_type: TV
     value_type: TV
 
-    def __init__(self, key_type: TV, value_type: TV):
+    def __init__(self, key_type: TV, value_type: TV) -> None:
         self.key_type = key_type
         self.value_type = value_type
 
     def bind_processor(
-        self, dialect: Dialect
+        self, dialect: Dialect,
     ) -> Optional[Callable[[Optional[dict]], Optional[dict]]]:
         return lambda value: (
             {"key": list(value), "value": list(value.values())} if value else None
         )
 
     def result_processor(
-        self, dialect: Dialect, coltype: str
+        self, dialect: Dialect, coltype: str,
     ) -> Optional[Callable[[Optional[dict]], Optional[dict]]]:
         return lambda value: dict(zip(value["key"], value["value"])) if value else {}
 
 
 class Union(TypeEngine):
-    """
-    Represents a UNION type in DuckDB
+    """Represents a UNION type in DuckDB.
 
     ```python
     from duckdb_engine.datatypes import Union
@@ -167,7 +165,7 @@ class Union(TypeEngine):
     __visit_name__ = "union"
     fields: Dict[str, TV]
 
-    def __init__(self, fields: Dict[str, TV]):
+    def __init__(self, fields: Dict[str, TV]) -> None:
         self.fields = fields
 
 
@@ -217,14 +215,15 @@ def struct_or_union(
 ) -> str:
     fields = instance.fields
     if fields is None:
-        raise exc.CompileError(f"DuckDB {repr(instance)} type requires fields")
+        msg = f"DuckDB {repr(instance)} type requires fields"
+        raise exc.CompileError(msg)
     return "({})".format(
         ", ".join(
             "{} {}".format(
-                identifier_preparer.quote_identifier(key), process_type(value, compiler)
+                identifier_preparer.quote_identifier(key), process_type(value, compiler),
             )
             for key, value in fields.items()
-        )
+        ),
     )
 
 

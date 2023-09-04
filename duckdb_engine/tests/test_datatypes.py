@@ -12,12 +12,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import sqltypes
 from sqlalchemy.types import JSON
 
-from ..datatypes import Map, Struct, types
+from duckdb_engine.datatypes import Map, Struct, types
 
 
 @mark.parametrize("coltype", types)
 def test_unsigned_integer_type(
-    engine: Engine, session: Session, coltype: Type[Integer]
+    engine: Engine, session: Session, coltype: Type[Integer],
 ) -> None:
     Base = declarative_base()
 
@@ -126,7 +126,6 @@ def test_nested_types(engine: Engine, session: Session) -> None:
         id = Column(Integer, primary_key=True, default=0)
         struct = Column(Struct(fields={"name": String}))
         map = Column(Map(String, Integer))
-        # union = Column(Union(fields={"name": String, "age": Integer}))
 
     base.metadata.create_all(bind=engine)
 
