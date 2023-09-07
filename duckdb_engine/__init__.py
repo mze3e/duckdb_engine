@@ -54,7 +54,10 @@ class DBAPI:
 
 class DuckDBInspector(PGInspector):
     def get_check_constraints(
-        self, table_name: str, schema: Optional[str] = None, **kw: Any,
+        self,
+        table_name: str,
+        schema: Optional[str] = None,
+        **kw: Any,
     ) -> List[Dict[str, Any]]:
         try:
             return super().get_check_constraints(table_name, schema, **kw)
@@ -253,7 +256,8 @@ class Dialect(PGDialect_psycopg2):
     ) -> Any:
         s = "SELECT table_name FROM information_schema.tables WHERE table_type='VIEW' and table_schema=:schema_name"
         rs = connection.execute(
-            text(s), {"schema_name": schema if schema is not None else "main"},
+            text(s),
+            {"schema_name": schema if schema is not None else "main"},
         )
 
         return [row[0] for row in rs]
@@ -292,10 +296,18 @@ class Dialect(PGDialect_psycopg2):
         return cls.dbapi()
 
     def do_executemany(
-        self, cursor: Any, statement: Any, parameters: Any, context: Optional[Any] = ...,
+        self,
+        cursor: Any,
+        statement: Any,
+        parameters: Any,
+        context: Optional[Any] = ...,
     ) -> None:
         return DefaultDialect.do_executemany(
-            self, cursor, statement, parameters, context,
+            self,
+            cursor,
+            statement,
+            parameters,
+            context,
         )
 
     # FIXME: this method is a hack around the fact that we use a single cursor for all queries inside a connection,
@@ -338,7 +350,9 @@ class Dialect(PGDialect_psycopg2):
         domains = {
             ((d["schema"], d["name"]) if not d["visible"] else (d["name"],)): d
             for d in self._load_domains(  # type: ignore[attr-defined]
-                connection, schema="*", info_cache=kw.get("info_cache"),
+                connection,
+                schema="*",
+                info_cache=kw.get("info_cache"),
             )
         }
 
@@ -349,7 +363,9 @@ class Dialect(PGDialect_psycopg2):
             if rec["visible"]
             else ((rec["schema"], rec["name"]), rec)
             for rec in self._load_enums(  # type: ignore[attr-defined]
-                connection, schema="*", info_cache=kw.get("info_cache"),
+                connection,
+                schema="*",
+                info_cache=kw.get("info_cache"),
             )
         )
 

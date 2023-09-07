@@ -17,7 +17,9 @@ from duckdb_engine.datatypes import Map, Struct, types
 
 @mark.parametrize("coltype", types)
 def test_unsigned_integer_type(
-    engine: Engine, session: Session, coltype: Type[Integer],
+    engine: Engine,
+    session: Session,
+    coltype: Type[Integer],
 ) -> None:
     Base = declarative_base()
 

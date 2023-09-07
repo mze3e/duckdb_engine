@@ -136,14 +136,17 @@ class Map(TypeEngine):
         self.value_type = value_type
 
     def bind_processor(
-        self, dialect: Dialect,
+        self,
+        dialect: Dialect,
     ) -> Optional[Callable[[Optional[dict]], Optional[dict]]]:
         return lambda value: (
             {"key": list(value), "value": list(value.values())} if value else None
         )
 
     def result_processor(
-        self, dialect: Dialect, coltype: str,
+        self,
+        dialect: Dialect,
+        coltype: str,
     ) -> Optional[Callable[[Optional[dict]], Optional[dict]]]:
         return lambda value: dict(zip(value["key"], value["value"])) if value else {}
 
@@ -220,7 +223,8 @@ def struct_or_union(
     return "({})".format(
         ", ".join(
             "{} {}".format(
-                identifier_preparer.quote_identifier(key), process_type(value, compiler),
+                identifier_preparer.quote_identifier(key),
+                process_type(value, compiler),
             )
             for key, value in fields.items()
         ),
