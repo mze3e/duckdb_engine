@@ -279,7 +279,7 @@ def test_table_reflect(session: Session, engine: Engine) -> None:
 
 
 def test_enum_type_format(session: Session, engine: Engine) -> None:
-    importorskip("duckdb", "0.6.1-dev10")
+    importorskip("duckdb", "0.6.1")
 
     sql = [
         "CREATE TYPE enum_t AS ENUM('a', 'b');",
@@ -307,7 +307,7 @@ def test_enum_type_format(session: Session, engine: Engine) -> None:
 
 
 def test_enum_reflection(session: Session, engine: Engine) -> None:
-    importorskip("duckdb", "0.6.1-dev10")
+    importorskip("duckdb", "0.6.1")
 
     sql = [
         "CREATE TYPE enum_t AS ENUM('a', 'b');",
